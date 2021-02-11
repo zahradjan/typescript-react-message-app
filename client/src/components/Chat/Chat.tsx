@@ -1,15 +1,19 @@
-/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react'
 import queryString from 'query-string'
-// import io = require('socket.io-client')
-import { io } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
+import InfoBar from './../InfoBar/InfoBar'
+import Input from './../Input/Input'
+import Messages from './../Messages/Messages'
+import TextContainer from '../TextContainer/TextContainer'
 
-let socket
+import './Chat.css'
+let socket: Socket
 
 const Chat = ({ location }) => {
-    const [name, setName] = useState('')
-    const [room, setRoom] = useState('')
-    const [messages, setMessages] = useState([])
+    const [name, setName] = useState<any | null>('')
+    const [room, setRoom] = useState<any | null>('')
+    const [users, setUsers] = useState('')
+    const [messages, setMessages] = useState<any | null>([])
     const [message, setMessage] = useState('')
     const ENDPOINT = 'localhost:5000'
     useEffect(() => {
@@ -28,14 +32,14 @@ const Chat = ({ location }) => {
     }, [ENDPOINT, location.search])
 
     useEffect(() => {
-        socket.on(
-            'message',
-            (message) => {
-                setMessages([...messages, message])
-            },
-            [messages]
-        )
-    })
+        socket.on('message', (message) => {
+            setMessages((messages) => [...messages, message])
+        })
+
+        socket.on('roomData', ({ users }) => {
+            setUsers(users)
+        })
+    }, [])
 
     const sendMessage = (event) => {
         event.preventDefault()
@@ -50,8 +54,11 @@ const Chat = ({ location }) => {
     return (
         <div className="outerContainer">
             <div className="container">
-                <input value={message} onChange={(event) => setMessage(event.target.value)} onKeyPress={(event) => (event.key === 'Enter' ? sendMessage(event) : null)} />
+                <InfoBar room={room} />
+                <Messages messages={messages} name={name} />
+                <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
+            <TextContainer users={users} />
         </div>
     )
 }

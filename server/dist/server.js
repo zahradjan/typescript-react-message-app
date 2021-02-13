@@ -3,43 +3,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require('express');
-const socketio = require('socket.io');
-const http = require('http');
-const cors = require('cors');
+//TODO: Vyresit import vs require
+const express_1 = __importDefault(require("express"));
+const socket_io_1 = require("socket.io");
+const http_1 = __importDefault(require("http"));
+const cors_1 = __importDefault(require("cors"));
 const router_1 = __importDefault(require("./router"));
+const users_1 = require("./users");
 const PORT = process.env.PORT || 5000;
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
-app.use(cors());
+const app = express_1.default();
+const server = http_1.default.createServer(app);
+// od socket.io v3 je potreba definovat cors options na backendu
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+});
+app.use(cors_1.default());
 app.use(router_1.default);
-io.on('connection', (socket) => {
+io.on('connect', (socket) => {
     socket.on('join', ({ name, room }, callback) => {
-        const { error, user } = addUser({ id: socket.id, name, room });
+        // if (name === undefined || room === undefined) return
+        const { error, user } = users_1.addUser({ id: socket.id, name, room });
         if (error)
             return callback(error);
-        socket.emit('message', { user: 'admin', text: `${user.name}, welcome to the room ${user.room}` });
-        //dat vedem vsem ze prisel user
-        socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
         socket.join(user.room);
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+        socket.emit('message', { user: 'admin', text: `${user.name}, welcome to room ${user.room}.` });
+        socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
+        io.to(user.room).emit('roomData', { room: user.room, users: users_1.getUsersInRoom(user.room) });
         callback();
     });
     socket.on('sendMessage', (message, callback) => {
-        const user = getUser(socket.id);
+        const user = users_1.getUser(socket.id);
         io.to(user.room).emit('message', { user: user.name, text: message });
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
         callback();
     });
     socket.on('disconnect', () => {
-        const user = removeUser(socket.id);
+        const user = users_1.removeUser(socket.id);
         if (user) {
-            io.to(user.room).emit('message', { user: 'admin', text: `${user.name} had left..` });
+            io.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has left.` });
+            io.to(user.room).emit('roomData', { room: user.room, users: users_1.getUsersInRoom(user.room) });
         }
     });
 });
-app.use(router_1.default);
-server.listen(5000, () => console.log(`Server has started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
 //# sourceMappingURL=server.js.map

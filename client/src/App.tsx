@@ -5,8 +5,8 @@ import Join from './components/Join/Join'
 const App = (): JSX.Element => {
     return (
         <Router>
-            <Route path="/" exact component={Join}></Route>
-            <Route path="/" component={Chat}></Route>
+            <Route exact path="/" component={Join}></Route>
+            <Route path="/chat" component={Chat}></Route>
         </Router>
     )
 }

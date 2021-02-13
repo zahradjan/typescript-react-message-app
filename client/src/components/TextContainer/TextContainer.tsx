@@ -14,7 +14,7 @@ const TextContainer = ({ users }) => (
                 </span>
             </h1>
             <h2>
-                Created with React, Express, Node and Socket.IO{' '}
+                Written in TypeScript, Created with React, Express, Node and Socket.IO{' '}
                 <span role="img" aria-label="emoji">
                     ❤️
                 </span>

@@ -5,7 +5,7 @@ import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
 import router from './router'
-
+import path from 'path'
 import { addUser, removeUser, getUser, getUsersInRoom } from './users'
 
 const PORT = process.env.PORT || 5000
@@ -20,8 +20,13 @@ const io = new Server(server, {
     },
 })
 
+app.use(express.static(path.join(__dirname, '../../client/build')))
 app.use(cors())
 app.use(router)
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+})
 
 io.on('connect', (socket) => {
     socket.on('join', ({ name, room }, callback) => {
@@ -51,7 +56,7 @@ io.on('connect', (socket) => {
         const user = removeUser(socket.id)
 
         if (user) {
-            io.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has left.` })
+            io.to(user.room).emit('message', { user: 'admin', text: `${user.name} has left.` })
             io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) })
         }
     })

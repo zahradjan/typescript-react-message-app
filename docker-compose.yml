@@ -1,0 +1,26 @@
+version: '3'
+services:
+    client:
+        container_name: client
+        build:
+            context: ./client
+            dockerfile: ./Dockerfile
+        ports:
+            - '3000:3000'
+        networks:
+            - message-app
+        links:
+            - server
+    server:
+        container_name: server
+        build:
+            context: ./server
+            dockerfile: ./Dockerfile
+        ports:
+            - '5000:5000'
+        networks:
+            - message-app
+
+networks:
+    message-app:
+        driver: bridge

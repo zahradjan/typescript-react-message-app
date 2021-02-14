@@ -7,7 +7,7 @@ It was slightly modified, and main difference is that it is written entirely in 
 Main goal of this project was to get better at TypeScript and understanding of WebSockets with Socket.io library.
 
 <p align="center">
-<img height="500px" src="/pics/messageapp.PNG">
+<img height="400px" src="/pics/messageapp.PNG">
 </p>
 
 ### Prerequisites

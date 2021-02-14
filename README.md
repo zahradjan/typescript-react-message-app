@@ -46,7 +46,7 @@ App does not have any tests.
 
 ## Deployment
 
-If you wish you can deploy backend in heroku for instance and client folder in netlify as shown in original  [Project Chat Application](https://github.com/adrianhajdin/project_chat_application). 
+If you wish you can deploy backend in heroku for instance and frontend production build in netlify as shown in original  [Project Chat Application](https://github.com/adrianhajdin/project_chat_application). 
 
 ## Built With
 

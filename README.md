@@ -1,5 +1,5 @@
 <p align="center">
-<img width="300px" height="300px" src="/pics/messageapp.PNG">
+<img height="300px" src="/pics/messageapp.PNG">
 </p>
 
 # Message App 

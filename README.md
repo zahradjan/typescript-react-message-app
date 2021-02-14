@@ -2,16 +2,13 @@
 
 # Message App 
 
-<p align="center">
-<img height="600px" src="/pics/messageapp.PNG">
-</p>
-
-
-
 This message app is clone project from [Project Chat Application](https://github.com/adrianhajdin/project_chat_application). 
 It was slightly modified, and main difference is that it is written entirely in TypeScript. It also has functional docker-compose for development purpose. 
 Main goal of this project was to get better at TypeScript and understanding of WebSockets with Socket.io library.
 
+<p align="center">
+<img height="500px" src="/pics/messageapp.PNG">
+</p>
 
 ### Prerequisites
 

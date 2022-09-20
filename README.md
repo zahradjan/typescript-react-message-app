@@ -58,4 +58,4 @@ If you wish you can deploy backend in heroku for instance and frontend productio
 
 ## Authors
 
-* **John Gardener** - *Whole project* - [ocasusMaximus](https://github.com/ocasusMaximus)
+* **Jan Zahradník** - *Whole project* - [zahradjan](https://github.com/zahradjan)
